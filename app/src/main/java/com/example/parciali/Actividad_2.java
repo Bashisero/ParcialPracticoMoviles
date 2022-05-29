@@ -27,6 +27,8 @@ public class Actividad_2 extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad2);
+        Bundle recibo = getIntent().getExtras();
+        String n = recibo.getString("n");
         nombre = findViewById(R.id.nombre);
         adios = findViewById(R.id.adios);
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -36,6 +38,8 @@ public class Actividad_2 extends AppCompatActivity
         {
             String name = acc.getDisplayName();
             nombre.setText(name);
+        }else{
+                nombre.setText(n);
         }
         adios.setOnClickListener(new View.OnClickListener()
         {

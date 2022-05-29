@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView googleButton;
+    Bundle datos = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     {
         finish();
         Intent intent = new Intent(MainActivity.this,Actividad_2.class);
+        intent.putExtras(datos);
         startActivity(intent);
     }
 
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if(usuarios.equals(edUsuario.getText().toString()) && contraseñas.equals(edContraseña.getText().toString()))
                                 {
+                                    datos.putString("n",edUsuario.getText().toString());
                                     navigateToSecondActivity();
                                     flag = 1;
                                     break;
