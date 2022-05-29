@@ -7,29 +7,89 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText edRespuestaHTTP;
+    EditText edUsuario;
+    EditText edContraseña;
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
+    ImageView googleButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        edRespuestaHTTP = findViewById(R.id.edRespuestaHTTP);
+        edUsuario = findViewById(R.id.edUsuario);
+        edContraseña = findViewById(R.id.edContraseña);
+        googleButton = findViewById(R.id.googleButton);
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                signIn();
+            }
+        });
+    }
+    public void signIn()
+    {
+        Intent signInIntent = gsc.getSignInIntent();
+        startActivityForResult(signInIntent,1000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1000)
+        {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try
+            {
+                task.getResult(ApiException.class);
+                navigateToSecondActivity();
+            }
+            catch (ApiException e)
+            {
+                Toast.makeText(getApplicationContext(),"Te quiero mucho", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void navigateToSecondActivity()
+    {
+        finish();
+        Intent intent = new Intent(MainActivity.this,Actividad_2.class);
+        startActivity(intent);
     }
 
     public void Volley (View v){
         RequestQueue queue =  Volley.newRequestQueue(this);
-        String url = "https://run.mocky.io/v3/75521479-578e-4d1f-a579-a7e2c624f66c";
+        String url = "https://run.mocky.io/v3/a0e0d862-5f8d-41c3-a4e6-dda569173481";
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -37,19 +97,31 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             Log.d("", "Respuesta: " + response.toString());
-                            JSONArray jsonArray = response.getJSONArray("usuario");
+                            JSONArray jsonArray = response.getJSONArray("usuarios");
                             Log.d("", "Respuesta: " + jsonArray.toString());
-                            String usuarios = "";
 
-                            Log.d("", "Respuesta: " + response.toString());
-                            JSONArray jsonArray2 = response.getJSONArray("contraseña");
-                            Log.d("", "Respuesta: " + jsonArray2.toString());
-                            String contraseñas = "";
-                            for (int i = 0; i <2; i++) {
+                            String usuarios, contraseñas = "";
+                            int flag = 0;
+
+                            for (int i = 0; i < response.getInt("count"); i++)
+                            {
                                 JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                                usuarios += jsonObject2.getString("nick") +"\n";
+                                usuarios=(jsonObject2.getString("usuario"));
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                contraseñas=(jsonObject.getString("contraseña"));
+
+                                if(usuarios.equals(edUsuario.getText().toString()) && contraseñas.equals(edContraseña.getText().toString()))
+                                {
+                                    navigateToSecondActivity();
+                                    flag = 1;
+                                    break;
+                                }
                             }
-                            edRespuestaHTTP.setText(usuarios);
+                            if(flag==0)
+                            {
+                                Toast.makeText(getApplicationContext(),"Te odio",
+                                Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -1,49 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#00833636"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".Actividad_2">
+
+    <TextView
+        android:id="@+id/saludo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hola cómo estás"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre"
+        android:layout_margin="20dp"/>
+
+    <Button
+        android:id="@+id/adios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adiós" />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="133dp" />
+        android:layout_margin="10dp"
+        android:text="Jajaja" />
 
     <CheckBox
         android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="187dp" />
+        android:layout_margin="10dp"
+        android:text="Jejeje" />
 
     <CheckBox
         android:id="@+id/checkBox3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="256dp" />
+        android:layout_margin="10dp"
+        android:text="Jijiji" />
 
     <CheckBox
         android:id="@+id/checkBox4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="312dp" />
+        android:layout_margin="10dp"
+        android:text="Jojojo" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch"
+        android:text="Jujuju"
         tools:layout_editor_absoluteX="161dp"
         tools:layout_editor_absoluteY="49dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
