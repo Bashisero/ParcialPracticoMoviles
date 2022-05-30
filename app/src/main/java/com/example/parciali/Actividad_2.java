@@ -2,11 +2,16 @@ package com.example.parciali;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,12 +26,17 @@ public class Actividad_2 extends AppCompatActivity
     Button adios,integrantes;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    public static final String BroadcastStringForAction="checkinternet";
+
+    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actividad2);
+        mIntentFilter=new IntentFilter();
+        mIntentFilter.addAction(BroadcastStringForAction);
         Bundle recibo = getIntent().getExtras();
         String n = recibo.getString("n");
         nombre = findViewById(R.id.nombre);
@@ -67,5 +77,39 @@ public class Actividad_2 extends AppCompatActivity
     public void integrantes(View l){
         Intent ir = new Intent(this,Actividad_3.class);
         startActivity(ir);
+    }
+
+    public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(BroadcastStringForAction)){
+                if(intent.getStringExtra("estatus online").equals("true")){
+                    //Toast.makeText(getApplicationContext(),"hay conexion", Toast.LENGTH_SHORT).show();
+                    //Set_Visibility_ON();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"no hay conexion", Toast.LENGTH_SHORT).show();
+                    Intent ir = new Intent(Actividad_2.this,MainActivity.class);
+                    startActivity(ir);
+                }
+            }
+        }
+    };
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        registerReceiver(MyReceiver,mIntentFilter);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        unregisterReceiver(MyReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(MyReceiver, mIntentFilter);
     }
 }

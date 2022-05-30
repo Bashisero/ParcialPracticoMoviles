@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 public class MainActivity extends AppCompatActivity {
-
     EditText edUsuario;
     EditText edContraseña;
     GoogleSignInOptions gso;
@@ -74,12 +73,6 @@ public class MainActivity extends AppCompatActivity {
         Intent irservice = new Intent(this,Servicio.class);
         startService(irservice);
 
-        /*
-        //binding.tvNotconnected.setVisibility(View.GONE);
-        if(!linea(getApplicationContext())){
-            Toast.makeText(getApplicationContext(),"no hay conexion", Toast.LENGTH_SHORT).show();
-        }
-         */
     }
     public void signIn()
     {
@@ -172,17 +165,12 @@ public class MainActivity extends AppCompatActivity {
         ;
         queue.add(req);
     }
-
     public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(BroadcastStringForAction)){
                 if(intent.getStringExtra("estatus online").equals("true")){
                     //Toast.makeText(getApplicationContext(),"hay conexion", Toast.LENGTH_SHORT).show();
-                    //Set_Visibility_ON();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"no hay conexion", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -197,18 +185,6 @@ public class MainActivity extends AppCompatActivity {
         else
             return false;
     }
-    /*
-    public void Set_Visibility_ON(){
-        binding.tvNotconnected.setVisibility(View.GONE);
-        binding.btnSubmit.setVisibility(View.VISIBLE);
-        binding.parent.setBackgroundColor(Color.WHITE);
-    }
-    public void Set_Visibility_OFF(){
-        binding.tvNotconnected.setVisibility(View.VISIBLE);
-        binding.btnSubmit.setVisibility(View.GONE);
-        binding.parent.setBackgroundColor(Color.RED);
-    }
-    */
     @Override
     protected void onRestart(){
         super.onRestart();
@@ -222,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        registerReceiver(MyReceiver,mIntentFilter);
+        registerReceiver(MyReceiver, mIntentFilter);
     }
 }
