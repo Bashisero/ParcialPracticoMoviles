@@ -14,19 +14,28 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.example.parciali.services.Servicio;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.example.parciali.databinding.ActivityMainBinding;
 
+import java.util.Observable;
 import java.util.ArrayList;
 import java.util.Queue;
 
@@ -38,11 +47,16 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     ImageView googleButton;
     Bundle datos = new Bundle();
+    ActivityMainBinding binding;
+    public static final String BroadcastStringForAction="checkinternet";
+
+    private IntentFilter mIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding=ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         edUsuario = findViewById(R.id.edUsuario);
         edContraseña = findViewById(R.id.edContraseña);
         googleButton = findViewById(R.id.googleButton);
@@ -55,6 +69,17 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+        mIntentFilter=new IntentFilter();
+        mIntentFilter.addAction(BroadcastStringForAction);
+        Intent irservice = new Intent(this,Servicio.class);
+        startService(irservice);
+
+        /*
+        //binding.tvNotconnected.setVisibility(View.GONE);
+        if(!linea(getApplicationContext())){
+            Toast.makeText(getApplicationContext(),"no hay conexion", Toast.LENGTH_SHORT).show();
+        }
+         */
     }
     public void signIn()
     {
@@ -85,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     {
         finish();
         Intent intent = new Intent(MainActivity.this,Actividad_2.class);
+        Log.d("","respuesta:"+datos);
         intent.putExtras(datos);
         startActivity(intent);
     }
@@ -147,4 +173,57 @@ public class MainActivity extends AppCompatActivity {
         queue.add(req);
     }
 
+    public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(BroadcastStringForAction)){
+                if(intent.getStringExtra("estatus online").equals("true")){
+                    //Toast.makeText(getApplicationContext(),"hay conexion", Toast.LENGTH_SHORT).show();
+                    //Set_Visibility_ON();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"no hay conexion", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    public boolean linea(Context c){
+        ConnectivityManager cm=(ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni=cm.getActiveNetworkInfo();
+
+        if(ni!=null && ni.isConnectedOrConnecting())
+            return true;
+        else
+            return false;
+    }
+    /*
+    public void Set_Visibility_ON(){
+        binding.tvNotconnected.setVisibility(View.GONE);
+        binding.btnSubmit.setVisibility(View.VISIBLE);
+        binding.parent.setBackgroundColor(Color.WHITE);
+    }
+    public void Set_Visibility_OFF(){
+        binding.tvNotconnected.setVisibility(View.VISIBLE);
+        binding.btnSubmit.setVisibility(View.GONE);
+        binding.parent.setBackgroundColor(Color.RED);
+    }
+    */
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        registerReceiver(MyReceiver,mIntentFilter);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        unregisterReceiver(MyReceiver);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        registerReceiver(MyReceiver,mIntentFilter);
+    }
 }

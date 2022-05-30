@@ -25,7 +25,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    viewBinding{
+        enabled = true
+    }
 }
+
 
 dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.2.0'

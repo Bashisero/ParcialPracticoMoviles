@@ -18,7 +18,7 @@ import com.google.android.gms.tasks.Task;
 public class Actividad_2 extends AppCompatActivity
 {
     TextView nombre;
-    Button adios;
+    Button adios,integrantes;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
@@ -31,6 +31,7 @@ public class Actividad_2 extends AppCompatActivity
         String n = recibo.getString("n");
         nombre = findViewById(R.id.nombre);
         adios = findViewById(R.id.adios);
+        integrantes = findViewById(R.id.integrantes);
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
@@ -61,5 +62,10 @@ public class Actividad_2 extends AppCompatActivity
                 startActivity(new Intent(Actividad_2.this, MainActivity.class));
             }
         });
+    }
+
+    public void integrantes(View l){
+        Intent ir = new Intent(this,Actividad_3.class);
+        startActivity(ir);
     }
 }

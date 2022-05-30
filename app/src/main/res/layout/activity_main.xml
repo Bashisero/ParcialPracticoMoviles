@@ -4,36 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="visible"
     tools:context=".MainActivity">
+
     <EditText
         android:id="@+id/edUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Usuario" />
+        android:hint="Usuario"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edContraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Contraseña" />
+        android:hint="Contraseña"
+        android:inputType="textPassword" />
+
     <Button
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ingresar"
-        android:onClick="Volley"/>
+        android:onClick="Volley"
+        android:text="Ingresar" />
 
     <EditText
         android:id="@+id/edRespuestaHTTP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" />
+        android:ems="10"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/googleButton"
